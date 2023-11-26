@@ -10,6 +10,7 @@ import com.javaguides.employeeservice.dto.DepartmentDto;
 import com.javaguides.employeeservice.dto.EmployeeDto;
 import com.javaguides.employeeservice.entity.Employee;
 import com.javaguides.employeeservice.repository.EmployeeRepository;
+
 import com.javaguides.employeeservice.service.EmployeeService;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 //	private RestTemplate restTemplate;
 	
 	private WebClient webClient;
+	
+//	private APIClient apiClient;
 	
 	
 	
@@ -70,9 +73,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 //	    
 //	    DepartmentDto departmentDto = responseEntity.getBody();
 		
-		DepartmentDto departmentDto =webClient.get().uri("http://localhost:8080/api/department/" + employee.getDepartmentCode())
+		DepartmentDto departmentDto =webClient.get().uri("http://localhost:8082/api/department/" + employee.getDepartmentCode())
 		.retrieve().bodyToMono(DepartmentDto.class).block();
-	    
+//	    
+		
+//		DepartmentDto departmentDto = apiClient.getDeapartment(employee.getDepartmentCode());
+		
 		EmployeeDto employeeDto = new EmployeeDto(
 				employee.getId(),
 				employee.getFirstName(),
