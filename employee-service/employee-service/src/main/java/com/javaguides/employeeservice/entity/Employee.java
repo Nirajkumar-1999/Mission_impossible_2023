@@ -28,6 +28,7 @@ public class Employee {
 	private String departmentCode;
 	
 	
+	
 	public long getId() {
 		return id;
 	}
@@ -58,6 +59,7 @@ public class Employee {
 	public void setDepartmentCode(String departmentCode) {
 		this.departmentCode = departmentCode;
 	}
+	
 	
 	
 	

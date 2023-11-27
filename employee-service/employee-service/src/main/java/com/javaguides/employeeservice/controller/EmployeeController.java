@@ -13,6 +13,9 @@ import com.javaguides.employeeservice.dto.APIResponseDto;
 import com.javaguides.employeeservice.dto.EmployeeDto;
 import com.javaguides.employeeservice.service.EmployeeService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @RestController
 @RequestMapping("/api/employees")
 public class EmployeeController {
@@ -25,6 +28,14 @@ public class EmployeeController {
 	}
 	
 	@PostMapping
+	@Operation(
+			summary="Save Employee Rest API",
+			description="Save Employee  Rest Api is used to save employee object in database"
+			)
+	@ApiResponse(
+			responseCode="201",
+			description="HTTP status 201 created"
+			)
 	public ResponseEntity<EmployeeDto> saveEmployee(@RequestBody EmployeeDto employeeDto){
 		EmployeeDto savedEmployee = employeeService.saveEmployee(employeeDto);
 		return new ResponseEntity<>(savedEmployee,HttpStatus.CREATED);
@@ -34,6 +45,14 @@ public class EmployeeController {
 	//Build getById Empl Rest Api
 	
 	@GetMapping("{id}")
+	@Operation(
+			summary="Get Employee Rest API",
+			description="Get Employee  Rest Api is used to get employee object in database"
+			)
+	@ApiResponse(
+			responseCode="200",
+			description="HTTP status 200 success"
+			)
 	public ResponseEntity<APIResponseDto> getEmployee(@PathVariable("id") long employeeId){
 		APIResponseDto apiResponseDto = employeeService.getEmployeeById(employeeId);
 		return new ResponseEntity<>(apiResponseDto,HttpStatus.OK);

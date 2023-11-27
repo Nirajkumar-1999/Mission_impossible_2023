@@ -13,6 +13,8 @@ import com.javaguides.employeeservice.repository.EmployeeRepository;
 
 import com.javaguides.employeeservice.service.EmployeeService;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -66,16 +68,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
 	@Override
+//	@CircuitBreaker(name="${spring.application.name}",fallbackMethod = "getDefaultDepartment")
+	@Retry(name="${spring.application.name}",fallbackMethod = "getDefaultDepartment")
 	public APIResponseDto getEmployeeById(long employeeId) {
 		Employee employee = employeeRepository.findById(employeeId).get();
+		
+		
 		
 //	    ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/department/" + employee.getDepartmentCode(),DepartmentDto.class);
 //	    
 //	    DepartmentDto departmentDto = responseEntity.getBody();
-		
+//		
 		DepartmentDto departmentDto =webClient.get().uri("http://localhost:8082/api/department/" + employee.getDepartmentCode())
 		.retrieve().bodyToMono(DepartmentDto.class).block();
-//	    
+    
 		
 //		DepartmentDto departmentDto = apiClient.getDeapartment(employee.getDepartmentCode());
 		
@@ -92,6 +98,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 		apiResponseDto.setDepartment(departmentDto);
 		
 		return apiResponseDto;
+	}
+	
+	public APIResponseDto getDefaultDepartment(long employeeId, Exception exception) {
+        Employee employee = employeeRepository.findById(employeeId).get();
+		
+		DepartmentDto departmentDto = new DepartmentDto();
+		departmentDto.setDepartmentName("R&D");
+		departmentDto.setDepartmentDescription("Reasearch and Development");
+		departmentDto.setDepartmentCode("RD001");
+		
+		    
+				
+
+				
+				EmployeeDto employeeDto = new EmployeeDto(
+						employee.getId(),
+						employee.getFirstName(),
+						employee.getLastName(),
+						employee.getEmail(),
+						employee.getDepartmentCode()
+						);
+				
+				APIResponseDto apiResponseDto = new APIResponseDto();
+				apiResponseDto.setEmployee(employeeDto);
+				apiResponseDto.setDepartment(departmentDto);
+				
+				return apiResponseDto;
+		
 	}
 
 }
