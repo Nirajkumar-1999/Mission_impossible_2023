@@ -9,12 +9,12 @@ import org.springframework.kafka.config.TopicBuilder;
 @Configuration
 public class KafkaTopicConfig {
 	
-	  @Value("${spring.kafka.topic.name}")
-	    private String topicName;
+//	  @Value("${spring.kafka.topic.name}")
+//	    private String topicName;
 
 	    @Bean
 	    public NewTopic topic(){
-	        return TopicBuilder.name(topicName)
+	        return TopicBuilder.name("wikimedia_recentchange")
 	                .build();
 	    }
 
