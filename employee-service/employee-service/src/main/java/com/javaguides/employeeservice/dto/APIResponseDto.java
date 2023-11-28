@@ -17,6 +17,8 @@ public class APIResponseDto {
 	
 	private DepartmentDto department;
 	
+	private OrganizationDto organizationDto;
+	
 	
 	
 

@@ -26,6 +26,9 @@ public class Employee {
 	@Column(nullable=false,unique=true)
 	private String email;
 	private String departmentCode;
+	private String organizationCode;
+	
+	
 	
 	
 	
@@ -59,6 +62,14 @@ public class Employee {
 	public void setDepartmentCode(String departmentCode) {
 		this.departmentCode = departmentCode;
 	}
+	public String getOrganizationCode() {
+		return organizationCode;
+	}
+	public void setOrganizationCode(String organizationCode) {
+		this.organizationCode = organizationCode;
+	}
+	
+	
 	
 	
 	

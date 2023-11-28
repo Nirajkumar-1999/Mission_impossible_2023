@@ -8,7 +8,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.javaguides.employeeservice.dto.APIResponseDto;
 import com.javaguides.employeeservice.dto.DepartmentDto;
 import com.javaguides.employeeservice.dto.EmployeeDto;
+import com.javaguides.employeeservice.dto.OrganizationDto;
 import com.javaguides.employeeservice.entity.Employee;
+import com.javaguides.employeeservice.mapper.EmployeeMapper;
 import com.javaguides.employeeservice.repository.EmployeeRepository;
 
 import com.javaguides.employeeservice.service.EmployeeService;
@@ -42,27 +44,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
 		//convert EmployeeDto into jpa entity
-		Employee employee = new Employee(
-				employeeDto.getId(),
-				employeeDto.getFirstName(),
-				employeeDto.getLastName(),
-				employeeDto.getEmail(),
-				employeeDto.getDepartmentCode()
-				);
 		
+		Employee employee = EmployeeMapper.mapToEmployee(employeeDto);
+		
+//		Employee employee = new Employee(
+//				employeeDto.getId(),
+//				employeeDto.getFirstName(),
+//				employeeDto.getLastName(),
+//				employeeDto.getEmail(),
+//				employeeDto.getDepartmentCode()
+//				);
+//		
 		Employee savedEmployee =employeeRepository.save(employee);
 		
 		//convert savedEmployee jpa entity into dto
 		
-		EmployeeDto saveDEmployeeDto = new EmployeeDto(
-				savedEmployee.getId(),
-				savedEmployee.getFirstName(),
-				savedEmployee.getLastName(),
-				savedEmployee.getEmail(),
-				savedEmployee.getDepartmentCode()
-				);
+//		EmployeeDto saveDEmployeeDto = new EmployeeDto(
+//				savedEmployee.getId(),
+//				savedEmployee.getFirstName(),
+//				savedEmployee.getLastName(),
+//				savedEmployee.getEmail(),
+//				savedEmployee.getDepartmentCode()
+//				);
+		
+		  EmployeeDto savedEmployeeDto = EmployeeMapper.mapToEmployeeDto(savedEmployee);
 				
-		return saveDEmployeeDto;
+		return savedEmployeeDto;
 	}
 
 
@@ -85,13 +92,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 //		DepartmentDto departmentDto = apiClient.getDeapartment(employee.getDepartmentCode());
 		
-		EmployeeDto employeeDto = new EmployeeDto(
-				employee.getId(),
-				employee.getFirstName(),
-				employee.getLastName(),
-				employee.getEmail(),
-				employee.getDepartmentCode()
-				);
+//		EmployeeDto employeeDto = new EmployeeDto(
+//				employee.getId(),
+//				employee.getFirstName(),
+//				employee.getLastName(),
+//				employee.getEmail(),
+//				employee.getDepartmentCode()
+//				
+//				);
+		
+		OrganizationDto organizationDto = webClient.get()
+                .uri("http://localhost:8085/api/organization/" + employee.getOrganizationCode())
+                .retrieve()
+                .bodyToMono(OrganizationDto.class)
+                .block();
+		
+		 EmployeeDto employeeDto = EmployeeMapper.mapToEmployeeDto(employee);
 		
 		APIResponseDto apiResponseDto = new APIResponseDto();
 		apiResponseDto.setEmployee(employeeDto);
@@ -112,13 +128,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 				
 
 				
-				EmployeeDto employeeDto = new EmployeeDto(
-						employee.getId(),
-						employee.getFirstName(),
-						employee.getLastName(),
-						employee.getEmail(),
-						employee.getDepartmentCode()
-						);
+//				EmployeeDto employeeDto = new EmployeeDto(
+//						employee.getId(),
+//						employee.getFirstName(),
+//						employee.getLastName(),
+//						employee.getEmail(),
+//						employee.getDepartmentCode()
+//						
+//						);
+		
+		 EmployeeDto employeeDto = EmployeeMapper.mapToEmployeeDto(employee);
 				
 				APIResponseDto apiResponseDto = new APIResponseDto();
 				apiResponseDto.setEmployee(employeeDto);
